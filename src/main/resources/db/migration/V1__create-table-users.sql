@@ -1,7 +1,7 @@
 CREATE TABLE users(
     id SERIAL,
     username VARCHAR(36) NOT NULL UNIQUE,
-    password BINARY(60) NOT NULL,
+    password CHAR(60) NOT NULL,
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
     email VARCHAR(254) NOT NULL UNIQUE,
     full_name VARCHAR(100) NOT NULL,
