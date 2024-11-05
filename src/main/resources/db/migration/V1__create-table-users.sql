@@ -5,7 +5,7 @@ CREATE TABLE users(
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
     email VARCHAR(254) NOT NULL UNIQUE,
     full_name VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(15) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL UNIQUE,
 
     currency VARCHAR(3) NOT NULL DEFAULT "USD",
     language VARCHAR(13) NOT NULL DEFAULT "en",
