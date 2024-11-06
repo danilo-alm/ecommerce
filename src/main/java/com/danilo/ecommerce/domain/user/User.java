@@ -63,19 +63,19 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Authority> authorities;
 
-    public void addAuthority(String authorityName) {
+    private void ensureAuthorities() {
         if (this.authorities == null) {
             this.authorities = new HashSet<>();
         }
+    }
 
-        boolean authorityExists = authorities.stream()
-            .anyMatch(auth -> auth.getAuthority().equals(authorityName));
+    public void addAuthority(String authorityName) {
+        this.ensureAuthorities();
 
-        if (!authorityExists) {
-            Authority authority = new Authority();
-            authority.setUser(this);
-            authority.setAuthority(authorityName);
-            authorities.add(authority);
-        }
+        Authority authority = new Authority();
+        authority.setUser(this);
+        authority.setAuthority(authorityName);
+
+        authorities.add(authority);
     }
 }
