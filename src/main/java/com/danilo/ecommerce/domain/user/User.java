@@ -78,4 +78,10 @@ public class User {
 
         authorities.add(authority);
     }
+
+    public void removeAuthority(String authorityName) {
+        this.ensureAuthorities();
+
+        authorities.removeIf(auth -> auth.getAuthority().equals(authorityName));
+    }
 }
