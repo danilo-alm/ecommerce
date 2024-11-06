@@ -3,6 +3,7 @@ package com.danilo.ecommerce.domain.authority;
 import com.danilo.ecommerce.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "authorities", uniqueConstraints = {
@@ -14,7 +15,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @IdClass(AuthorityId.class)
-public class Authority {
+public class Authority implements GrantedAuthority {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED NOT NULL", foreignKey = @ForeignKey(name = "fk_authorities_users"))
