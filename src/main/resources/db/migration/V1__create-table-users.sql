@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    id SERIAL,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(36) NOT NULL UNIQUE,
     password CHAR(60) NOT NULL,
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
@@ -7,8 +7,8 @@ CREATE TABLE users(
     full_name VARCHAR(100) NOT NULL,
     phone_number VARCHAR(15) NOT NULL UNIQUE,
 
-    currency VARCHAR(3) NOT NULL DEFAULT "USD",
-    language VARCHAR(13) NOT NULL DEFAULT "en",
+    currency VARCHAR(3) NOT NULL DEFAULT 'USD',
+    language VARCHAR(13) NOT NULL DEFAULT 'en',
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
