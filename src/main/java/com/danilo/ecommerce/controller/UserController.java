@@ -17,9 +17,19 @@ import java.net.URI;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getById(@PathVariable BigInteger id) {
-        return ResponseEntity.ok(userService.getById(id));
+    @GetMapping
+    public ResponseEntity<UserResponseDTO> getUser(
+        @RequestParam(required = false) BigInteger id,
+        @RequestParam(required = false) String username
+    ) {
+        if (id != null) {
+            return ResponseEntity.ok(userService.getById(id));
+        }
+        if (username != null) {
+            return ResponseEntity.ok(userService.getByUsername(username));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping

@@ -27,6 +27,13 @@ public class UserService {
         return new UserResponseDTO(foundUser);
     }
 
+    public UserResponseDTO getByUsername(String username) {
+        User foundUser = userRepository.findByUsername(username).orElseThrow(
+            () -> new UserNotFoundException(username)
+        );
+        return new UserResponseDTO(foundUser);
+    }
+
     @Transactional
     public User createUser(UserRequestDTO userDTO) {
         String encryptedPassword = passwordEncoder.encode(userDTO.password());
