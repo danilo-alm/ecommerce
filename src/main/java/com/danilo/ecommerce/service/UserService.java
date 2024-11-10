@@ -1,5 +1,6 @@
 package com.danilo.ecommerce.service;
 
+import com.danilo.ecommerce.domain.authority.Authority;
 import com.danilo.ecommerce.domain.user.User;
 import com.danilo.ecommerce.dto.UserDTO;
 import com.danilo.ecommerce.repository.UserRepository;
@@ -36,7 +37,16 @@ public class UserService {
             user.setLanguage(userDTO.language());
         }
 
-        userRepository.save(user);
+        if (userDTO.authorities() != null) {
+            for (String value : userDTO.authorities()) {
+                Authority authority = new Authority();
+                authority.setAuthority(value);
+                authority.setUser(user);
+                user.addAuthority(authority);
+            }
+        }
+
+        userRepository.saveAndFlush(user);
         entityManager.refresh(user);
         return user;
     }

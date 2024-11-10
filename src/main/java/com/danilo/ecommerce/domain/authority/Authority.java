@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @EqualsAndHashCode
 @IdClass(AuthorityId.class)
 public class Authority implements GrantedAuthority {
@@ -22,6 +23,6 @@ public class Authority implements GrantedAuthority {
     private User user;
 
     @Id
-    @Column(length = 50, columnDefinition = "VARCHAR(50) NOT NULL")
+    @Column(name = "authority", columnDefinition = "VARCHAR(50) NOT NULL")
     private String authority;
 }

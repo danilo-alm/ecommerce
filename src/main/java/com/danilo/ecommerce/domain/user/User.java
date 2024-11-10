@@ -69,19 +69,13 @@ public class User {
         }
     }
 
-    public void addAuthority(String authorityName) {
-        this.ensureAuthorities();
-
-        Authority authority = new Authority();
-        authority.setUser(this);
-        authority.setAuthority(authorityName);
-
-        authorities.add(authority);
+    public void addAuthority(Authority authority) {
+        ensureAuthorities();
+        this.authorities.add(authority);
     }
 
-    public void removeAuthority(String authorityName) {
-        this.ensureAuthorities();
-
-        authorities.removeIf(auth -> auth.getAuthority().equals(authorityName));
+    public void removeAuthority(Authority authority) {
+        ensureAuthorities();
+        this.authorities.remove(authority);
     }
 }
