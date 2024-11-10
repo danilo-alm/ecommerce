@@ -1,5 +1,6 @@
 package com.danilo.ecommerce.repository;
 
+import com.danilo.ecommerce.domain.authority.Authority;
 import com.danilo.ecommerce.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +39,18 @@ public class UserRepositoryTests {
             .language("en")
             .build();
 
-        testUser.addAuthority("ROLE_ADMIN");
-        testUser.addAuthority("ROLE_USER");
+        testUser.addAuthority(
+            Authority.builder()
+                .authority("ROLE_ADMIN")
+                .user(testUser)
+                .build()
+        );
+        testUser.addAuthority(
+            Authority.builder()
+                .authority("ROLE_USER")
+                .user(testUser)
+                .build()
+        );
     }
 
     @Test
