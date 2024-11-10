@@ -1,14 +1,17 @@
-package com.danilo.ecommerce.service;
+package com.danilo.ecommerce.service.user;
 
 import com.danilo.ecommerce.domain.authority.Authority;
 import com.danilo.ecommerce.domain.user.User;
-import com.danilo.ecommerce.dto.UserDTO;
+import com.danilo.ecommerce.dto.UserRequestDTO;
+import com.danilo.ecommerce.dto.UserResponseDTO;
 import com.danilo.ecommerce.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.math.BigInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +20,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EntityManager entityManager;
 
+    public UserResponseDTO getById(BigInteger id) {
+        User foundUser = userRepository.findById(id).orElseThrow(
+            () -> new UserNotFoundException(id)
+        );
+        return new UserResponseDTO(foundUser);
+    }
+
     @Transactional
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserRequestDTO userDTO) {
         String encryptedPassword = passwordEncoder.encode(userDTO.password());
 
         User user = User.builder()
