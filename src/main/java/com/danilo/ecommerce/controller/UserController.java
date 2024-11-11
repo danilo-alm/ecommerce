@@ -20,13 +20,21 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserResponseDTO> getUser(
         @RequestParam(required = false) BigInteger id,
-        @RequestParam(required = false) String username
+        @RequestParam(required = false) String username,
+        @RequestParam(required = false) String email,
+        @RequestParam(required = false) String phoneNumber
     ) {
         if (id != null) {
             return ResponseEntity.ok(userService.getById(id));
         }
         if (username != null) {
             return ResponseEntity.ok(userService.getByUsername(username));
+        }
+        if (email != null) {
+            return ResponseEntity.ok(userService.getByEmail(email));
+        }
+        if (phoneNumber != null) {
+            return ResponseEntity.ok(userService.getByPhoneNumber(phoneNumber));
         }
 
         return ResponseEntity.badRequest().build();

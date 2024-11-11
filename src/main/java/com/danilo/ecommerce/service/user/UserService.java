@@ -22,14 +22,28 @@ public class UserService {
 
     public UserResponseDTO getById(BigInteger id) {
         User foundUser = userRepository.findById(id).orElseThrow(
-            () -> new UserNotFoundException(id)
+            UserNotFoundException::new
         );
         return new UserResponseDTO(foundUser);
     }
 
     public UserResponseDTO getByUsername(String username) {
         User foundUser = userRepository.findByUsername(username).orElseThrow(
-            () -> new UserNotFoundException(username)
+            UserNotFoundException::new
+        );
+        return new UserResponseDTO(foundUser);
+    }
+
+    public UserResponseDTO getByPhoneNumber(String phoneNumber) {
+        User foundUser = userRepository.findByPhoneNumber(phoneNumber).orElseThrow(
+            UserNotFoundException::new
+        );
+        return new UserResponseDTO(foundUser);
+    }
+
+    public UserResponseDTO getByEmail(String email) {
+        User foundUser = userRepository.findByEmail(email).orElseThrow(
+            UserNotFoundException::new
         );
         return new UserResponseDTO(foundUser);
     }
