@@ -1,6 +1,5 @@
 package com.danilo.ecommerce.controller;
 
-import com.danilo.ecommerce.domain.user.User;
 import com.danilo.ecommerce.dto.UserRequestDTO;
 import com.danilo.ecommerce.dto.UserResponseDTO;
 import com.danilo.ecommerce.service.user.UserService;
@@ -41,9 +40,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserRequestDTO userDTO) {
-        User user = userService.createUser(userDTO);
-        URI loc = URI.create("/user/" + user.getId());
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userDTO) {
+        UserResponseDTO user = userService.createUser(userDTO);
+        URI loc = URI.create("/user/" + user.id());
         return ResponseEntity.created(loc).body(user);
     }
 

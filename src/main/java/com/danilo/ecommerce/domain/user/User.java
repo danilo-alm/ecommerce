@@ -11,9 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", indexes = {
-    @Index(name = "idx_users_email", columnList = "email"),
-    @Index(name = "idx_users_username", columnList = "username")
+@Table(name = "Users", indexes = {
+    @Index(name = "IX_Users_Email", columnList = "Email"),
+    @Index(name = "IX_Users_Username", columnList = "Username"),
+    @Index(name = "IX_Users_PhoneNumber", columnList = "PhoneNumber")
 })
 @DynamicInsert
 @Getter
@@ -24,44 +25,41 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "SERIAL")
+    @Column(name = "Id", columnDefinition = "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY")
     private BigInteger id;
 
-    @Column(name = "username", columnDefinition = "VARCHAR(36) NOT NULL UNIQUE")
+    @Column(name = "Username", columnDefinition = "VARCHAR(36) NOT NULL UNIQUE")
     private String username;
 
-    @Column(name = "password",columnDefinition = "CHAR(60) NOT NULL")
+    @Column(name = "Password",columnDefinition = "CHAR(60) NOT NULL")
     private String password;
 
-    @Column(name = "enabled", columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
+    @Column(name = "Enabled", columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
     private boolean enabled;
 
-    @Column(name = "email", columnDefinition = "VARCHAR(254) NOT NULL UNIQUE")
+    @Column(name = "Email", columnDefinition = "VARCHAR(254) NOT NULL UNIQUE")
     private String email;
 
-    @Column(name = "full_name", columnDefinition = "VARCHAR(100) NOT NULL")
+    @Column(name = "FullName", columnDefinition = "VARCHAR(100) NOT NULL")
     private String fullName;
 
-    @Column(name = "phone_number", columnDefinition = "VARCHAR(15) NOT NULL UNIQUE")
+    @Column(name = "PhoneNumber", columnDefinition = "VARCHAR(15) NOT NULL UNIQUE")
     private String phoneNumber;
 
-    @Column(name = "currency", columnDefinition = "VARCHAR(3) NOT NULL DEFAULT 'USD'")
-    private String currency;
-
-    @Column(name = "language", columnDefinition = "VARCHAR(13) NOT NULL DEFAULT 'en'")
-    private String language;
-
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CreatedAt", columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @Column(name = "last_login", columnDefinition = "TIMESTAMP")
+    @Column(name = "LastLogin", columnDefinition = "TIMESTAMP")
     private LocalDateTime lastLogin;
 
-    @Column(name = "failed_login_attempts", columnDefinition = "INT NOT NULL DEFAULT 0")
+    @Column(name = "FailedLoginAttempts", columnDefinition = "INT NOT NULL DEFAULT 0")
     private int failedLoginAttempts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Authority> authorities;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserPreferences preferences;
 
     private void ensureAuthorities() {
         if (this.authorities == null) {

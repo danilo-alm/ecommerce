@@ -2,6 +2,7 @@ package com.danilo.ecommerce.service.user;
 
 import com.danilo.ecommerce.domain.authority.Authority;
 import com.danilo.ecommerce.domain.user.User;
+import com.danilo.ecommerce.domain.user.UserPreferences;
 import com.danilo.ecommerce.dto.UserRequestDTO;
 import com.danilo.ecommerce.dto.UserResponseDTO;
 import com.danilo.ecommerce.repository.UserRepository;
@@ -49,7 +50,7 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(UserRequestDTO userDTO) {
+    public UserResponseDTO createUser(UserRequestDTO userDTO) {
         String encryptedPassword = passwordEncoder.encode(userDTO.password());
 
         User user = User.builder()
@@ -61,12 +62,17 @@ public class UserService {
             .enabled(userDTO.enabled())
             .build();
 
-        if (userDTO.currency() != null) {
-            user.setCurrency(userDTO.currency());
-        }
-        if (userDTO.language() != null) {
-            user.setLanguage(userDTO.language());
-        }
+        userRepository.saveAndFlush(user);
+        entityManager.refresh(user);
+
+        UserPreferences userPreferences = UserPreferences.builder()
+            .user(user)
+            .currency(userDTO.currency())
+            .locale(userDTO.locale())
+            .timeZone(userDTO.timeZone())
+            .build();
+
+        user.setPreferences(userPreferences);
 
         if (userDTO.authorities() != null) {
             for (String value : userDTO.authorities()) {
@@ -77,8 +83,7 @@ public class UserService {
             }
         }
 
-        userRepository.saveAndFlush(user);
-        entityManager.refresh(user);
-        return user;
+        userRepository.save(user);
+        return new UserResponseDTO(user);
     }
 }
