@@ -2,6 +2,7 @@ package com.danilo.ecommerce.repository;
 
 import com.danilo.ecommerce.domain.authority.Authority;
 import com.danilo.ecommerce.domain.user.User;
+import com.danilo.ecommerce.domain.user.UserPreferences;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Currency;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,11 +37,17 @@ public class UserRepositoryTests {
             .fullName("Test User")
             .email("test@email.com")
             .phoneNumber("1234567890")
-            .currency("USD")
             .enabled(true)
-            .createdAt(LocalDateTime.now())
-            .language("en")
             .build();
+
+        UserPreferences testUserPreferences = UserPreferences.builder()
+            .user(testUser)
+            .locale(Locale.ENGLISH)
+            .currency(Currency.getInstance("USD"))
+            .timeZone(ZoneId.of("GMT"))
+            .build();
+
+        testUser.setPreferences(testUserPreferences);
 
         testUser.addAuthority(
             Authority.builder()
