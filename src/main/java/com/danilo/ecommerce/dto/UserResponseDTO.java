@@ -4,7 +4,7 @@ import com.danilo.ecommerce.domain.authority.Authority;
 import com.danilo.ecommerce.domain.user.User;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.util.Currency;
 import java.util.Locale;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public record UserResponseDTO(BigInteger id, String username, String fullName, String phoneNumber, String email,
                               Currency currency, Locale locale, ZoneId timeZone,
-                              LocalDateTime createdAt, LocalDateTime lastLogin,
+                              Timestamp createdAt, Timestamp updatedAt, Timestamp lastLogin,
                               int failedLoginAttempts, boolean enabled, Set<String> authorities) {
     public UserResponseDTO(User user) {
         this(
@@ -26,6 +26,7 @@ public record UserResponseDTO(BigInteger id, String username, String fullName, S
             user.getPreferences().getLocale(),
             user.getPreferences().getTimeZone(),
             user.getCreatedAt(),
+            user.getUpdatedAt(),
             user.getLastLogin(),
             user.getFailedLoginAttempts(),
             user.isEnabled(),

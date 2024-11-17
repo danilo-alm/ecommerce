@@ -3,10 +3,12 @@ package com.danilo.ecommerce.domain.user;
 import com.danilo.ecommerce.domain.authority.Authority;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,11 +48,16 @@ public class User {
     @Column(name = "PhoneNumber", columnDefinition = "VARCHAR(15) NOT NULL UNIQUE")
     private String phoneNumber;
 
+    @CreationTimestamp
     @Column(name = "CreatedAt", columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "UpdatedAt", columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Timestamp updatedAt;
 
     @Column(name = "LastLogin", columnDefinition = "TIMESTAMP")
-    private LocalDateTime lastLogin;
+    private Timestamp lastLogin;
 
     @Column(name = "FailedLoginAttempts", columnDefinition = "INT NOT NULL DEFAULT 0")
     private int failedLoginAttempts;

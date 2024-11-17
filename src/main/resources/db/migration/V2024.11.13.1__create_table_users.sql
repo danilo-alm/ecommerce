@@ -9,6 +9,7 @@ CREATE TABLE Users
     PhoneNumber         VARCHAR(15)  NOT NULL UNIQUE,
 
     CreatedAt           TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt           TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     LastLogin           TIMESTAMP,
 
     FailedLoginAttempts INT          NOT NULL DEFAULT 0

@@ -6,6 +6,7 @@ import com.danilo.ecommerce.domain.user.UserPreferences;
 import com.danilo.ecommerce.dto.UserRequestDTO;
 import com.danilo.ecommerce.dto.UserResponseDTO;
 import com.danilo.ecommerce.repository.UserRepository;
+import com.danilo.ecommerce.util.LocaleProcessor;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EntityManager entityManager;
+    private static final Set<String> ZONE_IDS = new HashSet<>(ZoneId.getAvailableZoneIds());
 
     public UserResponseDTO getById(BigInteger id) {
         User foundUser = userRepository.findById(id).orElseThrow(
@@ -65,12 +70,25 @@ public class UserService {
         userRepository.saveAndFlush(user);
         entityManager.refresh(user);
 
-        UserPreferences userPreferences = UserPreferences.builder()
-            .user(user)
-            .currency(userDTO.currency())
-            .locale(userDTO.locale())
-            .timeZone(userDTO.timeZone())
-            .build();
+        UserPreferences userPreferences = new UserPreferences();
+        userPreferences.setUser(user);
+        userPreferences.setCurrency(userDTO.currency());
+
+        if (userDTO.locale() != null) {
+            if (LocaleProcessor.isValid(userDTO.locale())) {
+                userPreferences.setLocale(userDTO.locale());
+            } else {
+                throw new IllegalArgumentException("Invalid locale: " + userDTO.locale());
+            }
+        }
+
+        if (userDTO.timeZone() != null) {
+            if (ZONE_IDS.contains(userDTO.timeZone())) {
+                userPreferences.setTimeZone(ZoneId.of(userDTO.timeZone()));
+            } else {
+                throw new IllegalArgumentException("Invalid time zone: " + userDTO.timeZone());
+            }
+        }
 
         user.setPreferences(userPreferences);
 
