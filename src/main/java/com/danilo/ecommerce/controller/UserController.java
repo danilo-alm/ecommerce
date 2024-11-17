@@ -46,4 +46,9 @@ public class UserController {
         return ResponseEntity.created(loc).body(user);
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@RequestParam BigInteger id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }

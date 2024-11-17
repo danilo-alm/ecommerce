@@ -86,4 +86,11 @@ public class UserService {
         userRepository.save(user);
         return new UserResponseDTO(user);
     }
+
+    public void deleteUser(BigInteger id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException();
+        }
+        userRepository.deleteById(id);
+    }
 }
